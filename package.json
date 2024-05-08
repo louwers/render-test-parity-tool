@@ -1,0 +1,27 @@
+{
+  "name": "render-test-parity-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "check": "node --env-file .env --no-warnings --loader ts-node/esm check-render-test-parity.ts",
+    "fix": "npx prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/core": "^6.1.2",
+    "@types/node": "^20.12.10",
+    "simple-git": "^3.24.0",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2"
+  },
+  "prettier": {
+    "printWidth": 100
+  },
+  "type": "module"
+}
