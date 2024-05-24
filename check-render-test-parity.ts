@@ -101,7 +101,7 @@ async function mdStatusReport(report: Report) {
 
 # MapLibre Render Test Parity Status Report
 
-Generated on: ${new Date().toISOString()} with [script](https://github.com/louwers/render-test-parity-tool/blob/main/check-render-test-parity.ts).
+Generated on: ${new Date().toISOString()} with [this script](https://github.com/louwers/render-test-parity-tool/blob/main/check-render-test-parity.ts).
 
 |Project|Commit|
 |-------|------|
