@@ -14,6 +14,7 @@ type Report = {
   sameDirs: string[];
   missingStylesNative: string[];
   missingStylesJs: string[];
+  sameStyles: string[]
 };
 
 async function compareDirectories(nativePath: string, jsDir: string): Promise<Report> {
@@ -42,6 +43,7 @@ async function compareDirectories(nativePath: string, jsDir: string): Promise<Re
 
     const missingStylesNative = Object.keys(jsStyles).filter((f) => !nativeStyles[f]);
     const missingStylesJs = Object.keys(nativeStyles).filter((f) => !jsStyles[f]);
+    const sameStyles = Object.keys(nativeStyles).filter((f) => jsStyles[f]);
 
     return {
       missingDirsNative,
@@ -49,6 +51,7 @@ async function compareDirectories(nativePath: string, jsDir: string): Promise<Re
       sameDirs,
       missingStylesNative,
       missingStylesJs,
+      sameStyles
     };
   }
 
@@ -70,6 +73,7 @@ async function compareDirectories(nativePath: string, jsDir: string): Promise<Re
       sameDirs: [...prev.sameDirs, ...curr.sameDirs],
       missingStylesJs: [...prev.missingStylesJs, ...curr.missingStylesJs],
       missingStylesNative: [...prev.missingStylesNative, ...curr.missingStylesNative],
+      sameStyles: [...prev.sameStyles, ...curr.sameStyles]
     }),
     comparison,
   );
@@ -77,24 +81,38 @@ async function compareDirectories(nativePath: string, jsDir: string): Promise<Re
   return all;
 }
 
+function linkIssue(issues: any, renderTest: string, platform: "native" | "js") {
+  const issue = issues?.[renderTest]?.[platform];
+  if (!issue) return "";
+  return issue;
+}
+
+function formatIssue(issueLink: string) {
+  if (!issueLink) return "";
+  return `([Tracking issue](${issueLink}))`
+}
+
 async function mdStatusReport(report: Report) {
   const { commit: jsCommit } = await getGitCommit(maplibreJs);
   const { commit: nativeCommit } = await getGitCommit(maplibreNative);
+  const issues = JSON.parse(await fs.readFile("./issues.json", "utf-8"))
 
   return `
 
 # MapLibre Render Test Parity Status Report
 
-Generated on: ${new Date().toISOString()}
+Generated on: ${new Date().toISOString()} with [script](https://github.com/louwers/render-test-parity-tool/blob/main/check-render-test-parity.ts).
 
 |Project|Commit|
 |-------|------|
 |MapLibre GL JS| [${jsCommit}](https://github.com/maplibre/maplibre-gl-js/commit/${jsCommit}) |
 |MapLibre Native| [${nativeCommit}](https://github.com/maplibre/maplibre-native/commit/${nativeCommit}) |
 
+${report.sameStyles.length} render tests are shared.
+
 ## Missing MapLibre Native
 
-${report.missingDirsNative.map((d) => `- [\`${d}\`](https://github.com/maplibre/maplibre-gl-js/tree/main/${renderTestPathJs}/${d})`).join("\n")}
+${report.missingDirsNative.map((d) => `- [\`${d}\`](https://github.com/maplibre/maplibre-gl-js/tree/main/${renderTestPathJs}/${d}) ${formatIssue(linkIssue(issues, d, "native"))}`).join("\n")}
 
 ## Missing MapLibre GL JS
 

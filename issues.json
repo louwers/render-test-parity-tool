@@ -1,0 +1,14 @@
+{
+  "text-max-width/force-newline-line-center": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2430"
+  },
+  "text-max-width/zero-width-line-placement": {
+    "native":"https://github.com/maplibre/maplibre-native/issues/2430"
+  },
+  "text-max-width/zero-width-line-center-placement": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2430"
+  },
+  "text-max-width/force-newline-line": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2430"
+  }
+}
