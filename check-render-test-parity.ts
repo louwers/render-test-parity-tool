@@ -95,7 +95,6 @@ function formatIssue(issueLink: string) {
 async function mdStatusReport(report: Report) {
   const { commit: jsCommit } = await getGitCommit(maplibreJs);
   const { commit: nativeCommit } = await getGitCommit(maplibreNative);
-  const issues = JSON.parse(await fs.readFile("./issues.json", "utf-8"))
 
   return `
 
@@ -108,17 +107,22 @@ Generated on: ${new Date().toISOString()} with [this script](https://github.com/
 |MapLibre GL JS| [${jsCommit}](https://github.com/maplibre/maplibre-gl-js/commit/${jsCommit}) |
 |MapLibre Native| [${nativeCommit}](https://github.com/maplibre/maplibre-native/commit/${nativeCommit}) |
 
-${report.sameStyles.length} render tests are shared.
+${report.sameStyles.length} render tests are shared.`.trim();
+}
 
-## Missing MapLibre Native
+function missingNative(report: Report, issues: any) {
+  return `
+  ## Missing MapLibre Native
 
 ${report.missingDirsNative.map((d) => `- [\`${d}\`](https://github.com/maplibre/maplibre-gl-js/tree/main/${renderTestPathJs}/${d}) ${formatIssue(linkIssue(issues, d, "native"))}`).join("\n")}
+  `;
+}
 
-## Missing MapLibre GL JS
+function missingJs(report: Report) {
+  return `
+  ## Missing MapLibre GL JS
 
-${report.missingDirsJs.map((d) => `- [\`${d}\`](https://github.com/maplibre/maplibre-native/tree/main/${renderTestPathNative}/${d})`).join("\n")}
-
-  `.trim();
+  ${report.missingDirsJs.map((d) => `- [\`${d}\`](https://github.com/maplibre/maplibre-native/tree/main/${renderTestPathNative}/${d})`).join("\n")}`
 }
 
 async function run() {
@@ -132,16 +136,27 @@ async function run() {
   });
 
   const mdReport = await mdStatusReport(result);
+  const issues = JSON.parse(await fs.readFile("./issues.json", "utf-8"))
+
+  const mdMissingNative = missingNative(result, issues);
+  const mdMissingJs = missingJs(result);
 
   await octokit.request("PATCH /gists/{gist_id}", {
     gist_id: process.env.GIST_ID,
     description: "Render Test Parity Status MapLibre",
     files: {
       "status.md": {
-        content: mdReport,
+        content: mdReport + mdMissingNative + mdMissingJs,
       },
     },
   });
+
+  await octokit.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+    issue_number: 2445,
+    owner: 'maplibre',
+    repo: 'maplibre-native',
+    body: mdReport + mdMissingNative
+  })
 }
 
 run();
