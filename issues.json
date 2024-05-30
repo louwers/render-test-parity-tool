@@ -10,5 +10,11 @@
   },
   "text-color/transparent": {
     "native": "https://github.com/maplibre/maplibre-native/issues/2167"
+  },
+  "text-overlap": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/251"
+  },
+  "icon-overlap": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/251"
   }
 }
