@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "check": "node --env-file .env --no-warnings --loader ts-node/esm check-render-test-parity.ts",
-    "fix": "npx prettier --write ."
+    "fix": "npx prettier --write .",
+    "copy": "node --env-file .env --no-warnings --loader ts-node/esm copy.ts"
   },
   "keywords": [],
   "author": "",
