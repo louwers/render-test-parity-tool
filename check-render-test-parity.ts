@@ -1,12 +1,8 @@
 import * as fs from "node:fs/promises";
-import * as path from "node:path";
 import { Octokit } from "@octokit/core";
 import { getGitCommit } from "./git.js";
-
-const renderTestPathNative = "metrics/integration/render-tests";
-const maplibreNative = path.resolve("../maplibre-native", renderTestPathNative);
-const renderTestPathJs = "test/integration/render/tests";
-const maplibreJs = path.resolve("../maplibre-gl-js", renderTestPathJs);
+import { maplibreJs, maplibreNative, renderTestPathJs, renderTestPathNative } from "./paths.js";
+import * as path from "node:path";
 
 type Report = {
   missingDirsNative: string[];
