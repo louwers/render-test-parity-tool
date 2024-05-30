@@ -1,5 +1,14 @@
 {
   "terrain": {
     "native": "https://github.com/maplibre/maplibre-native/issues/252"
+  },
+  "text-breaking": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2448"
+  },
+  "text-color/translucent": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2167"
+  },
+  "text-color/transparent": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/2167"
   }
 }
