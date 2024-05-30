@@ -16,5 +16,14 @@
   },
   "icon-overlap": {
     "native": "https://github.com/maplibre/maplibre-native/issues/251"
+  },
+  "text-pitch-alignment/auto-text-rotation-alignment-viewport-glyph": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/250"
+  },
+  "text-rotation-alignment/viewport-glyph-symbol-placement-point": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/250"
+  },
+  "text-rotation-alignment/viewport-glyph-symbol-placement-line": {
+    "native": "https://github.com/maplibre/maplibre-native/issues/250"
   }
 }
